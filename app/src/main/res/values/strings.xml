@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">FragmentApplication</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_settings_fragment">SettingsFragmentActivity</string>
+    <string name="preferences">System preferences</string>
+    <string name="title_checkbox_preference">Checkbox title</string>
+    <string name="summary_checkbox_preference">Checkbox summary</string>
+    <string name="title_activity_pref_fragment">PrefFragmentActivity</string>
+
+    <string name="sms">sms</string>
+    <string name="pref_summary_delete_limit">summary delete limit</string>
+    <string name="pref_title_sms_delete">title sms delete</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
+    <string name="textIntentBroadCast">Text to broadcast</string>
+    <string name="btnStartBroadcast">Broadcast</string>
+
+</resources>
