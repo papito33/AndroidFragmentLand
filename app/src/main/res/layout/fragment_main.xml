@@ -31,4 +31,17 @@
     android:onClick="broadcastCustomIntent"
     android:text="@string/btnStartBroadcast" />
 
+    <EditText android:id="@+id/searchFilm"
+      android:layout_height="wrap_content"
+      android:layout_width="fill_parent"
+      android:hint="@string/searchFilm">
+    </EditText>
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:text="@string/searchFilm"
+        android:onClick="searchFilm"
+     />
+
 </LinearLayout>

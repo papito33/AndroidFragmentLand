@@ -2,11 +2,13 @@ package com.example.thomas.fragmentapplication;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,9 +16,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import com.example.thomas.utils.JsonParser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    private static final String URLAPIFILM ="http://www.omdbapi.com/?";
+    private static final String TAG_URL="url api film omdbapi";
+    public static final String TAG_JSON= "json returned";
+    public static final String JSON_FILM="com.example.fragmentapplication.MainActivity.JSON_FILM";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +105,42 @@ public class MainActivity extends ActionBarActivity {
         // Or map point based on latitude/longitude
         // Uri location = Uri.parse("geo:37.422219,-122.08364?z=14"); // z param is zoom level
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
-        startActivity(mapIntent);   
+        startActivity(mapIntent);
+    }
+
+    public void searchFilm(View view){
+        new JSONParse().execute();
+    }
+
+    private class JSONParse extends AsyncTask<String, String, JSONObject> {
+        StringBuilder url = new StringBuilder();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            EditText editTextFilm = (EditText)findViewById(R.id.searchFilm);
+            url.append(URLAPIFILM);
+            url.append("s="+editTextFilm.getText());
+            url.append("&r=json");
+
+            Log.v(TAG_URL,url.toString());
+        }
+        @Override
+        protected JSONObject doInBackground(String... args) {
+            JsonParser jParser = new JsonParser();
+            // Getting JSON from URL
+            JSONObject json = jParser.getJSONFromUrl(url.toString());
+            return json;
+        }
+        @Override
+        protected void onPostExecute(JSONObject json) {
+                Log.v(TAG_JSON, json.toString());
+
+                super.onPostExecute(json);
+                Intent intent = new Intent(MainActivity.this, FilmActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(JSON_FILM,json.toString());
+                getApplicationContext().startActivity(intent);
+        }
     }
 
 }
