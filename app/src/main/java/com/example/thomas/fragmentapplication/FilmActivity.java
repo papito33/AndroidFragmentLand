@@ -1,5 +1,7 @@
 package com.example.thomas.fragmentapplication;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.example.thomas.utils.JsonParser;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +35,8 @@ public class FilmActivity extends ActionBarActivity {
 
     public static final String TAG_FILM_ACTIVITY="film activity en cours";
     private static final String TAG_NAME_FILM_ROW = "rowTextViewTitle";
+    private static final String TAG_ID_FILM_ROW = "idFilm";
+
 
 
     @Override
@@ -127,24 +133,28 @@ public class FilmActivity extends ActionBarActivity {
                     JSONObject c = jsonFilm.getJSONObject(i);
                     // Storing  JSON item in a Variable
                     String name = c.getString("Title");
+                    String idFilm = c.getString("imdbID");
                     Log.v("NAME FILM", name);
+                    Log.v("ID FILM", idFilm);
                     // Adding value HashMap key => value
                     HashMap<String, String> map = new HashMap<String, String>();
                     map.put(TAG_NAME_FILM_ROW, name);
+                    map.put(TAG_ID_FILM_ROW, idFilm);
                     oslist.add(map);
 
                     //Log.v("list" , String.valueOf(list.getId()));
                     ListAdapter adapter = new SimpleAdapter(getActivity(), oslist,
                             R.layout.film_list_item,
-                            new String[] { TAG_NAME_FILM_ROW}, new int[] {
-                            R.id.rowTextViewTitle});
+                            new String[] { TAG_NAME_FILM_ROW,TAG_ID_FILM_ROW}, new int[] {
+                            R.id.rowTextViewTitle,R.id.idFilm});
 
                     list.setAdapter(adapter);
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view,
                                             int position, long id) {
-                        Toast.makeText(getActivity(), "You Clicked at " + oslist.get(+position).get("Title"), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "You Clicked at " + oslist.get(+position).get(TAG_NAME_FILM_ROW) + "id" +oslist.get(+position).get(TAG_ID_FILM_ROW), Toast.LENGTH_SHORT).show();
+                        searchFilmById(oslist.get(+position).get(TAG_ID_FILM_ROW));
                     }
                 });
                 }
@@ -152,6 +162,47 @@ public class FilmActivity extends ActionBarActivity {
                 e.printStackTrace();
             }
         }
+        public void searchFilmById(String idFilm){
+
+            StringBuilder url = new StringBuilder();
+            url.append(MainActivity.URLAPIFILM);
+            url.append("i=");
+            url.append(idFilm);
+            url.append("&r=json");
+            new JSONParse(url.toString()).execute();
+        }
+        public class JSONParse extends AsyncTask<String, String, JSONObject> {
+            String url;
+            String JSON_FILM = "JSON_FILM";
+            public JSONParse(String url){
+                this.url = url;
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+
+            }
+            @Override
+            protected JSONObject doInBackground(String... args) {
+                JsonParser jParser = new JsonParser();
+                // Getting JSON from URL
+                JSONObject json = jParser.getJSONFromUrl(url);
+                return json;
+            }
+            @Override
+            protected void onPostExecute(JSONObject json) {
+
+                super.onPostExecute(json);
+                Intent intent = new Intent(getActivity(), UniqueFilmActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(JSON_FILM,json.toString());
+                startActivity(intent);
+            }
+        }
+
+
     }
 
 

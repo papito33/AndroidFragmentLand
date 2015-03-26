@@ -20,4 +20,8 @@
     <string name="textIntentBroadCast">Text to broadcast</string>
     <string name="btnStartBroadcast">Broadcast</string>
 
+    <string name="searchFilm">Search a film</string>
+    <string name="title_activity_film">FilmActivity</string>
+    <string name="title_activity_unique_film">UniqueFilmActivity</string>
+
 </resources>

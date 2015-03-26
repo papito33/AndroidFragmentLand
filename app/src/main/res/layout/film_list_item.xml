@@ -9,6 +9,12 @@ android:orientation="vertical" >
         android:padding="10dp"
         android:textSize="16sp" >
     </TextView>
+    <TextView
+        android:id="@+id/idFilm"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+    </TextView>
 
     
 </LinearLayout>

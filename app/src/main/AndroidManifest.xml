@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.thomas.fragmentapplication" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SettingsFragmentActivity"
+            android:label="@string/title_activity_settings_fragment" >
+        </activity>
+        <activity
+            android:name=".PrefFragmentActivity"
+            android:label="@string/title_activity_pref_fragment" >
+        </activity>
+
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+
+            <data android:scheme="geo" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+
+        <receiver android:name=".BroadCastReceiver" >
+            <intent-filter>
+                <action android:name="com.example.thomas.fragmentapplication.CUSTOM_INTENT" >
+                </action>
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".FilmActivity"
+            android:label="@string/title_activity_film" >
+        </activity>
+        <activity
+            android:name=".UniqueFilmActivity"
+            android:label="@string/title_activity_unique_film" >
+        </activity>
+    </application>
+
+</manifest>

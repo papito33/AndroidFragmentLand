@@ -26,7 +26,7 @@ import org.json.JSONObject;
 
 public class MainActivity extends ActionBarActivity {
 
-    private static final String URLAPIFILM ="http://www.omdbapi.com/?";
+    public static final String URLAPIFILM ="http://www.omdbapi.com/?";
     private static final String TAG_URL="url api film omdbapi";
     public static final String TAG_JSON= "json returned";
     public static final String JSON_FILM="com.example.fragmentapplication.MainActivity.JSON_FILM";
@@ -109,18 +109,25 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void searchFilm(View view){
-        new JSONParse().execute();
+
+        StringBuilder url = new StringBuilder();
+        EditText editTextFilm = (EditText)findViewById(R.id.searchFilm);
+        url.append(URLAPIFILM);
+        url.append("s="+editTextFilm.getText());
+        url.append("&r=json");
+        new JSONParse(url.toString()).execute();
     }
 
-    private class JSONParse extends AsyncTask<String, String, JSONObject> {
-        StringBuilder url = new StringBuilder();
+    public class JSONParse extends AsyncTask<String, String, JSONObject> {
+        String url;
+        public JSONParse(String url){
+            this.url = url;
+        }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            EditText editTextFilm = (EditText)findViewById(R.id.searchFilm);
-            url.append(URLAPIFILM);
-            url.append("s="+editTextFilm.getText());
-            url.append("&r=json");
+
 
             Log.v(TAG_URL,url.toString());
         }
@@ -128,7 +135,7 @@ public class MainActivity extends ActionBarActivity {
         protected JSONObject doInBackground(String... args) {
             JsonParser jParser = new JsonParser();
             // Getting JSON from URL
-            JSONObject json = jParser.getJSONFromUrl(url.toString());
+            JSONObject json = jParser.getJSONFromUrl(url);
             return json;
         }
         @Override
