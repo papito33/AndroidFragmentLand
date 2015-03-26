@@ -23,6 +23,17 @@
         android:id="@+id/plotFilm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/custView" />
+        android:layout_below="@+id/custView"
+        android:visibility="gone"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show the plot"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="showThePlot"
+        android:nestedScrollingEnabled="true" />
+
 
 </RelativeLayout>

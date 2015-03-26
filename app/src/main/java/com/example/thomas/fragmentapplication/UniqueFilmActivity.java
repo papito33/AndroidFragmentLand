@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.example.thomas.CustomViews.ViewTest;
@@ -17,6 +20,8 @@ import org.json.JSONObject;
 public class UniqueFilmActivity extends ActionBarActivity {
 
     private ViewTest myViewTest;
+    // Animation
+    public Animation animSlideDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +46,16 @@ public class UniqueFilmActivity extends ActionBarActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        //slideDown(animSlideDown,plotFilm);
 
+    }
+
+    public void showThePlot(View view){
+        TextView text = (TextView) findViewById(R.id.plotFilm);
+        text.setVisibility(View.VISIBLE);
+        animSlideDown = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.slide_down);
+        text.startAnimation(animSlideDown);
     }
 
 
