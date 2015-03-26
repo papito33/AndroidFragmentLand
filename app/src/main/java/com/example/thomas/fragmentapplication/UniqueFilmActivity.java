@@ -5,17 +5,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.example.thomas.CustomViews.ViewTest;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
 public class UniqueFilmActivity extends ActionBarActivity {
 
+    private ViewTest myViewTest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unique_film);
+        myViewTest = (ViewTest) findViewById(R.id.custView);
         JSONObject obj = new JSONObject();
         try {
             obj = new JSONObject(getIntent().getStringExtra("JSON_FILM"));
@@ -23,6 +30,18 @@ public class UniqueFilmActivity extends ActionBarActivity {
             e.printStackTrace();
         }
         Log.v("film" ,obj.toString());
+        try {
+            myViewTest.setLabelText(obj.getString("Title"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        TextView plotFilm = (TextView) findViewById(R.id.plotFilm);
+        try {
+            plotFilm.setText(obj.getString("Plot"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
