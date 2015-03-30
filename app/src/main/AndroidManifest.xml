@@ -48,7 +48,9 @@
         </activity>
         <activity
             android:name=".UniqueFilmActivity"
-            android:label="@string/title_activity_unique_film" >
+            android:label="@string/title_activity_unique_film"
+            android:configChanges="orientation|screenSize"
+            >
         </activity>
 
         <service android:name="com.example.thomas.services.MyService" />

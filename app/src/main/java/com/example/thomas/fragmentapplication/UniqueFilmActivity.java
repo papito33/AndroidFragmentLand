@@ -1,20 +1,33 @@
 package com.example.thomas.fragmentapplication;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.thomas.CustomViews.ViewTest;
+import com.example.thomas.utils.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 
 
 public class UniqueFilmActivity extends ActionBarActivity {
@@ -46,7 +59,14 @@ public class UniqueFilmActivity extends ActionBarActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //slideDown(animSlideDown,plotFilm);
+
+        try {
+            new BitmapUrl(obj.getString("Poster")).execute();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
 
     }
 
@@ -56,6 +76,7 @@ public class UniqueFilmActivity extends ActionBarActivity {
         animSlideDown = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.slide_down);
         text.startAnimation(animSlideDown);
+        text.setMovementMethod(new ScrollingMovementMethod());
     }
 
 
@@ -80,4 +101,76 @@ public class UniqueFilmActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private class BitmapUrl extends AsyncTask<String, Void, Bitmap> {
+        String url;
+        public BitmapUrl(String url){
+            this.url = url;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+        @Override
+        protected Bitmap doInBackground(String... args) {
+            JsonParser jParser = new JsonParser();
+            // Getting JSON from URL
+            Bitmap bitmap = DownloadImage(url);
+            return bitmap;
+        }
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+
+            super.onPostExecute(bitmap);
+            ImageView imageView = (ImageView) findViewById(R.id.posterFilm);
+            imageView.setImageBitmap(bitmap);
+        }
+
+        private InputStream OpenHttpConnection(String urlString) throws IOException {
+            InputStream in = null;
+            int response = -1;
+
+            URL url = new URL(urlString);
+            URLConnection conn = url.openConnection();
+
+            if (!(conn instanceof HttpURLConnection))
+                throw new IOException("Not an HTTP connection");
+
+            try {
+                HttpURLConnection httpConn = (HttpURLConnection) conn;
+                httpConn.setAllowUserInteraction(false);
+                httpConn.setInstanceFollowRedirects(true);
+                httpConn.setRequestMethod("GET");
+                httpConn.connect();
+                response = httpConn.getResponseCode();
+                if (response == HttpURLConnection.HTTP_OK) {
+                    in = httpConn.getInputStream();
+                }
+            } catch (Exception ex) {
+                throw new IOException("Error connecting");
+            }
+            return in;
+        }
+
+        private Bitmap DownloadImage(String URL) {
+            Bitmap bitmap = null;
+            InputStream in = null;
+            try {
+                in = OpenHttpConnection(URL);
+                bitmap = BitmapFactory.decodeStream(in);
+                in.close();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            return bitmap;
+        }
+
+
+
+    }
+
+
 }

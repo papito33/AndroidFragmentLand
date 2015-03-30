@@ -168,6 +168,7 @@ public class FilmActivity extends ActionBarActivity {
             url.append(MainActivity.URLAPIFILM);
             url.append("i=");
             url.append(idFilm);
+            url.append("&plot=full");
             url.append("&r=json");
             new JSONParse(url.toString()).execute();
         }

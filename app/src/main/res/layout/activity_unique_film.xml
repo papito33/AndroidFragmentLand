@@ -19,21 +19,34 @@
         android:layout_alignRight="@+id/plotFilm"
         android:layout_alignEnd="@+id/plotFilm" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/posterFilm"
+        android:layout_below="@+id/custView"></ImageView>
+
     <TextView
         android:id="@+id/plotFilm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/custView"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:layout_toRightOf="@id/posterFilm"
+        android:layout_marginBottom="50dp"
+        android:scrollbars="vertical"
+        />
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:text="Show the plot"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="showThePlot"
-        android:nestedScrollingEnabled="true" />
+        android:nestedScrollingEnabled="true"
+        android:id="@+id/button2" />
+
+
 
 
 </RelativeLayout>
