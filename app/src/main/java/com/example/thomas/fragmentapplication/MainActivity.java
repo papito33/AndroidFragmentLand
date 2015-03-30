@@ -113,7 +113,7 @@ public class MainActivity extends ActionBarActivity {
         StringBuilder url = new StringBuilder();
         EditText editTextFilm = (EditText)findViewById(R.id.searchFilm);
         url.append(URLAPIFILM);
-        url.append("s="+editTextFilm.getText());
+        url.append("s="+editTextFilm.getText().toString().trim());
         url.append("&r=json");
         new JSONParse(url.toString()).execute();
     }
