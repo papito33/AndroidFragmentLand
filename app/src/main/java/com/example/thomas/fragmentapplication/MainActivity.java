@@ -1,8 +1,12 @@
 package com.example.thomas.fragmentapplication;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -17,7 +21,10 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.thomas.services.MyService;
+import com.example.thomas.services.MyService.LocalBinder;
 import com.example.thomas.utils.JsonParser;
 
 import org.json.JSONException;
@@ -30,6 +37,8 @@ public class MainActivity extends ActionBarActivity {
     private static final String TAG_URL="url api film omdbapi";
     public static final String TAG_JSON= "json returned";
     public static final String JSON_FILM="com.example.fragmentapplication.MainActivity.JSON_FILM";
+    MyService myService ;
+    boolean mbound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +51,43 @@ public class MainActivity extends ActionBarActivity {
                     .commit();
         }
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Bind to LocalService
+        Intent intent = new Intent(this, MyService.class);
+        bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private ServiceConnection myConnection = new ServiceConnection() {
+
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            LocalBinder binder = (LocalBinder) service;
+            myService = binder.getService();
+            mbound= true;
+        }
+
+        public void onServiceDisconnected(ComponentName arg0) {
+            mbound = false;
+        }
+
+    };
+
+    public void CallService(View v){
+        //Si le service est lancé
+        Log.v("Calsservice","callservice");
+        if(mbound){
+
+            int num = myService.getRandomNumber();
+            Toast.makeText(this,"nombre aléatoire : "+ num,Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, "Service non lancé",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
 
     @Override
@@ -148,6 +194,9 @@ public class MainActivity extends ActionBarActivity {
                 intent.putExtra(JSON_FILM,json.toString());
                 getApplicationContext().startActivity(intent);
         }
+
+
+
     }
 
 }

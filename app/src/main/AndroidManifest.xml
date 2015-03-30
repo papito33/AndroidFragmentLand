@@ -50,6 +50,16 @@
             android:name=".UniqueFilmActivity"
             android:label="@string/title_activity_unique_film" >
         </activity>
+
+        <service android:name="com.example.thomas.services.MyService" />
+
+        <receiver
+            android:name=".ServiceReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
+
     </application>
 
 </manifest>
