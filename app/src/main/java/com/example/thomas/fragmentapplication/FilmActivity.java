@@ -36,21 +36,34 @@ public class FilmActivity extends ActionBarActivity {
     public static final String TAG_FILM_ACTIVITY="film activity en cours";
     private static final String TAG_NAME_FILM_ROW = "rowTextViewTitle";
     private static final String TAG_ID_FILM_ROW = "idFilm";
-
+    private static final String JSON_DATA = "JSON_DATA";
+    private JSONObject obj;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        JSONObject obj = new JSONObject();
         super.onCreate(savedInstanceState);
+        // Check whether we're recreating a previously destroyed instance
+        if (savedInstanceState != null) {
+            // Restore value of members from saved state
+            try {
+                obj = new JSONObject(savedInstanceState.getString(JSON_DATA));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            try {
+                obj = new JSONObject(getIntent().getStringExtra(MainActivity.JSON_FILM));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
         setContentView(R.layout.activity_film);
 
-        try {
-            obj = new JSONObject(getIntent().getStringExtra(MainActivity.JSON_FILM));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
 
         Log.v("obj",obj.toString());
         Bundle bundle = new Bundle();
@@ -66,6 +79,27 @@ public class FilmActivity extends ActionBarActivity {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putString(JSON_DATA, obj.toString());
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+
+        try {
+            obj = new JSONObject(savedInstanceState.getString(JSON_DATA));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Restore state members from saved instance
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -168,6 +202,7 @@ public class FilmActivity extends ActionBarActivity {
             url.append(MainActivity.URLAPIFILM);
             url.append("i=");
             url.append(idFilm);
+            url.append("&plot=full");
             url.append("&r=json");
             new JSONParse(url.toString()).execute();
         }
