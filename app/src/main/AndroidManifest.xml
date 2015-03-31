@@ -62,7 +62,7 @@
         <receiver
             android:name=".ServiceReceiver"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="true" >
         </receiver>
 
 
