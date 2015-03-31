@@ -1,5 +1,6 @@
 package com.example.thomas.fragmentapplication;
 
+import android.app.ActionBar;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
@@ -41,6 +42,10 @@ public class UniqueFilmActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unique_film);
         myViewTest = (ViewTest) findViewById(R.id.custView);
+        //Button back menu
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         JSONObject obj = new JSONObject();
         try {
             obj = new JSONObject(getIntent().getStringExtra("JSON_FILM"));
